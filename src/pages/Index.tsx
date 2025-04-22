@@ -7,11 +7,14 @@ import { Hero3D, Vehicle3D } from "@/components/Hero3D";
 import { Users, MapPin, ArrowDown, ArrowRight } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useTheme } from "@/components/theme-provider";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileSidebar from "@/components/MobileSidebar";
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState("welcome");
   const [scrolling, setScrolling] = useState(false);
   const { theme } = useTheme();
+  const isMobile = useIsMobile();
 
   // Track active section for navigation highlighting
   useEffect(() => {
@@ -82,8 +85,11 @@ export default function Index() {
         })}
       </div>
 
-      {/* NAV (fixed, scrolls to sections) */}
-      <nav className="fixed top-0 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 bg-white/90 dark:bg-slate-900/80 backdrop-blur border border-white/40 dark:border-slate-700/40 rounded-full px-8 py-3 mt-4 shadow-lg glass-morphism transform-gpu transition-all duration-500 hover:shadow-xl">
+      {/* Mobile Sidebar */}
+      <MobileSidebar activeSection={activeSection} scrollToSection={scrollToSection} />
+
+      {/* Desktop NAV (fixed, scrolls to sections) - hidden on mobile */}
+      <nav className="fixed top-0 left-1/2 -translate-x-1/2 z-30 hidden md:flex items-center gap-4 bg-white/90 dark:bg-slate-900/80 backdrop-blur border border-white/40 dark:border-slate-700/40 rounded-full px-8 py-3 mt-4 shadow-lg glass-morphism transform-gpu transition-all duration-500 hover:shadow-xl">
         {[
           { label: "Welcome", href: "#welcome" },
           { label: "Register", href: "#register" },
