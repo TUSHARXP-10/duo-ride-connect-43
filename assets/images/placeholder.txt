@@ -1,0 +1,9 @@
+
+Keep this directory for images. You'll need to add:
+- hero_3d.png
+- users_3d.png
+- bike_3d.png
+- car_3d.png
+- taxi_3d.png
+
+These should be exported from your current web app or created as new assets.

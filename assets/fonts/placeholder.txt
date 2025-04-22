@@ -1,0 +1,8 @@
+
+You'll need to download and add the following font files:
+- Poppins-Regular.ttf
+- Poppins-Medium.ttf
+- Poppins-SemiBold.ttf
+- Poppins-Bold.ttf
+
+These can be downloaded from Google Fonts.
