@@ -1,5 +1,5 @@
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import useInView3D, { InView3DOptions } from "@/components/useInView3D";
 
@@ -195,6 +195,29 @@ const ThemeSection: React.FC<ThemeSectionProps> = ({
     theme === "auto" ? "duration-700" :
     "duration-700";
 
+  // Add keyframe for shine effect in theme toggle button
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      // Check if the style exists already to avoid duplicates
+      const existingStyle = document.getElementById("shine-keyframe-style");
+      if (!existingStyle) {
+        const style = document.createElement("style");
+        style.id = "shine-keyframe-style";
+        style.textContent = `
+          @keyframes shine {
+            from {
+              transform: translateX(-200%);
+            }
+            to {
+              transform: translateX(200%);
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
+
   return (
     <section
       id={id}
@@ -232,23 +255,5 @@ const ThemeSection: React.FC<ThemeSectionProps> = ({
     </section>
   );
 };
-
-// Add keyframe for shine effect in theme toggle button
-if (typeof document !== "undefined") {
-  if (!document.querySelector("@keyframes shine")) {
-    const style = document.createElement("style");
-    style.textContent = `
-      @keyframes shine {
-        from {
-          transform: translateX(-200%);
-        }
-        to {
-          transform: translateX(200%);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-}
 
 export default ThemeSection;
