@@ -99,3 +99,47 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom 3d effect */
+@layer utilities {
+  .theme-section-3d {
+    /* perspective sets the 3d context */
+    perspective: 1600px;
+    perspective-origin: 50% 48%;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+  }
+  .animate-3d-in {
+    animation: section3dfadein 1s cubic-bezier(.21,1.1,.32,1);
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto;
+  }
+}
+@keyframes section3dfadein {
+  from {
+    opacity: 0;
+    transform: rotateX(21deg) translateY(32px) scale(0.95);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Hide vertical scrollbar for smoother section snap */
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+body::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
+}
+
+/* Add for glassmorphism effect improvement */
+.glass-morphism {
+  @apply backdrop-blur-xl bg-white/70 border border-white/20 shadow-[0_8px_40px_-8px_rgba(120,68,215,0.08)];
+}

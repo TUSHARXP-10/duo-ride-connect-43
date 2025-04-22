@@ -1,7 +1,8 @@
 
-import React from "react";
+import React, { useRef } from "react";
+import { cn } from "@/lib/utils";
+import useInView3D from "@/components/useInView3D";
 
-// ThemeType for clarity and extension
 type ThemeType = "purple" | "peach" | "mint" | "pink";
 
 interface ThemeSectionProps {
@@ -11,106 +12,113 @@ interface ThemeSectionProps {
   className?: string;
 }
 
-const themeConfig: Record<ThemeType, {
-  bg: string;
-  overlay?: React.ReactNode;
-}> = {
+const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; border?: string }> = {
   purple: {
-    bg: "bg-gradient-to-b from-[#E5DEFF] via-[#9b87f5]/30 to-[#F1F0FB]",
+    bg: "bg-gradient-to-br from-[#220057] via-[#6e59a5]/70 to-[#9b87f5]/80",
     overlay: (
-      <svg className="absolute left-0 right-0 top-0 -z-1 w-full h-full pointer-events-none" viewBox="0 0 1440 320">
+      <svg className="absolute left-0 top-0 w-full h-full -z-1 pointer-events-none" viewBox="0 0 1440 320">
         <defs>
-          <linearGradient id="purpleWaves" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.16" />
-            <stop offset="100%" stopColor="#6E59A5" stopOpacity="0.12" />
+          <linearGradient id="purpleWaves" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#a084eb" stopOpacity="0.13" />
+            <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.10" />
           </linearGradient>
         </defs>
-        <path fill="url(#purpleWaves)" fillOpacity="1" d="M0,96L40,128C80,160,160,224,240,229.3C320,235,400,181,480,186.7C560,192,640,256,720,272C800,288,880,256,960,240C1040,224,1120,224,1200,197.3C1280,171,1360,117,1400,90.7L1440,64L1440,0L1400,0C1360,0,1280,0,1200,0C1120,0,1040,0,960,0C880,0,800,0,720,0C640,0,560,0,480,0C400,0,320,0,240,0C160,0,80,0,40,0L0,0Z"/>
+        <path fill="url(#purpleWaves)" d="M0,128L36.6,117.3C73.2,107,146,85,218,85.3C290,85,363,107,436,133.3C508,160,581,192,653,181.3C726,171,798,117,871,112C943,107,1016,149,1089,149.3C1161,149,1234,107,1307,128C1379,149,1452,235,1515,256L1518,320L0,320Z"/>
       </svg>
-    )
+    ),
+    border: "border-[#5325a0]/60"
   },
   peach: {
-    bg: "bg-gradient-to-tr from-[#FDE1D3] via-[#FFDEE2] to-[#FFD1BA]",
+    bg: "bg-gradient-to-tr from-[#ffd7b5] via-[#ffa06b]/80 to-[#ff7171]/80",
     overlay: (
-      <svg className="absolute right-0 -top-12 w-[650px] h-[400px] pointer-events-none opacity-70" viewBox="0 0 600 400">
-        <ellipse cx="300" cy="200" rx="280" ry="120" fill="#FFA99F" fillOpacity="0.15" />
-        <ellipse cx="360" cy="140" rx="240" ry="100" fill="#F97316" fillOpacity="0.10" />
+      <svg className="absolute right-0 top-0 w-5/12 h-3/4 opacity-80 pointer-events-none" viewBox="0 0 400 350">
+        <ellipse cx="200" cy="170" rx="180" ry="100" fill="#FF719A" fillOpacity="0.12" />
+        <ellipse cx="260" cy="110" rx="110" ry="60" fill="#FFA06B" fillOpacity="0.17" />
       </svg>
-    )
+    ),
+    border: "border-[#FF9E69]/60"
   },
   mint: {
-    bg: "bg-gradient-to-br from-[#D3E4FD] via-[#F2FCE2] to-[#FEF7CD]",
+    bg: "bg-gradient-to-bl from-[#cde4b5] via-[#9af8e2]/80 to-[#6fcf97]/90",
     overlay: (
       <svg className="absolute left-0 bottom-0 w-full h-44 pointer-events-none" viewBox="0 0 1440 160">
         <defs>
           <linearGradient id="mintWave" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#BFFFCF" stopOpacity="0.10" />
-            <stop offset="100%" stopColor="#F2FCE2" stopOpacity="0.18" />
+            <stop offset="0%" stopColor="#AEE9D1" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#E2FFC7" stopOpacity="0.22" />
           </linearGradient>
         </defs>
         <path fill="url(#mintWave)" d="M0,128L48,112C96,96,192,64,288,58.7C384,53,480,75,576,101.3C672,128,768,160,864,170.7C960,181,1056,171,1152,138.7C1248,107,1344,53,1392,26.7L1440,0V160H0Z" />
       </svg>
-    )
+    ),
+    border: "border-[#50cfa0]/50"
   },
   pink: {
-    bg: "bg-gradient-to-tl from-[#FFE29F] via-[#FFA99F] to-[#FF719A]",
+    bg: "bg-gradient-to-tl from-[#FFE2F2] via-[#FFA0CB]/90 to-[#FF719A]/80",
     overlay: (
       <svg className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-40 pointer-events-none" viewBox="0 0 700 160">
-        <circle cx="350" cy="80" r="80" fill="#FF719A" fillOpacity="0.16" />
-        <ellipse cx="500" cy="40" rx="120" ry="40" fill="#D946EF" fillOpacity="0.12" />
+        <circle cx="350" cy="80" r="80" fill="#FF719A" fillOpacity="0.17" />
+        <ellipse cx="500" cy="40" rx="110" ry="35" fill="#EC4899" fillOpacity="0.10" />
       </svg>
-    )
-  },
+    ),
+    border: "border-[#EE78A7]/50"
+  }
 };
 
 const sectionConnector: Record<ThemeType, React.ReactNode> = {
   purple: (
     <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none">
       <svg width="100%" height="100%" viewBox="0 0 1600 100" preserveAspectRatio="none" fill="none">
-        <path d="M0,50 Q300,110 800,40 T1600,60 L1600,100 L0,100Z" fill="#FFDEE2" fillOpacity="0.30" />
+        <path d="M0,50 Q300,110 800,40 T1600,60 L1600,100 L0,100Z" fill="#FFD7B5" fillOpacity="0.33" />
       </svg>
     </div>
   ),
   peach: (
     <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none">
       <svg width="100%" height="100%" viewBox="0 0 1600 100" preserveAspectRatio="none" fill="none">
-        <path d="M0,70 Q400,10 900,70 T1600,60 L1600,100 L0,100Z" fill="#F2FCE2" fillOpacity="0.22" />
+        <path d="M0,70 Q400,10 900,70 T1600,60 L1600,100 L0,100Z" fill="#CDE4B5" fillOpacity="0.28" />
       </svg>
     </div>
   ),
   mint: (
     <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none">
       <svg width="100%" height="100%" viewBox="0 0 1600 100" preserveAspectRatio="none" fill="none">
-        <path d="M0,40 Q350,120 850,55 T1600,80 L1600,100 L0,100Z" fill="#FF719A" fillOpacity="0.17" />
+        <path d="M0,40 Q350,120 850,55 T1600,80 L1600,100 L0,100Z" fill="#FFA0CB" fillOpacity="0.17" />
       </svg>
     </div>
   ),
-  pink: null, // Last section has no connector
+  pink: null,
 };
 
 const ThemeSection: React.FC<ThemeSectionProps> = ({ id, theme, children, className = "" }) => {
-  const { bg, overlay } = themeConfig[theme];
+  const ref = useRef<HTMLDivElement | null>(null);
+  // InView triggers animate-3d-in class when visible
+  const isInView = useInView3D(ref);
+
+  const { bg, overlay, border } = themeConfig[theme];
 
   return (
     <section
       id={id}
-      className={`
-        relative min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 lg:px-0 scroll-mt-28
-        ${bg} transition-all duration-700 ease-in-out ${className}
-      `}
-      style={{
-        scrollSnapAlign: "start",
-      }}
+      ref={ref}
+      className={cn(
+        `theme-section-3d relative min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 lg:px-0 scroll-mt-28
+        ${bg} transition-all duration-700 ease-in-out ${className}`,
+        isInView ? "animate-3d-in" : "opacity-0 translate-y-20 scale-[0.97] rotate-x-12 pointer-events-none"
+      )}
+      style={{ scrollSnapAlign: "start" }}
     >
-      {/* 3D Animated Background, unique per theme */}
+      {/* 3D Animated Background */}
       {overlay && overlay}
-
-      {/* Interior content */}
-      <div className="w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center animate-fade-in bg-white/80 backdrop-blur-lg relative z-20">
+      {/* Interior */}
+      <div className={cn(
+        `w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center bg-white/80 backdrop-blur-lg relative z-20 border`,
+        border,
+        `duration-700 transition-all`
+      )}>
         {children}
       </div>
-
-      {/* Connecting Curve/liner to blend themes */}
+      {/* Curve */}
       {sectionConnector[theme]}
     </section>
   );
