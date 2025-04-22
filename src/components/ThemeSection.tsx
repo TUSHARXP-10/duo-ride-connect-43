@@ -1,7 +1,7 @@
 
 import React, { useRef } from "react";
 import { cn } from "@/lib/utils";
-import useInView3D from "@/components/useInView3D";
+import useInView3D, { InView3DOptions } from "@/components/useInView3D";
 
 type ThemeType = "purple" | "peach" | "mint" | "pink";
 
@@ -10,6 +10,7 @@ interface ThemeSectionProps {
   theme: ThemeType;
   children: React.ReactNode;
   className?: string;
+  animationOptions?: InView3DOptions;
 }
 
 const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; border?: string }> = {
@@ -67,21 +68,21 @@ const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; bo
 
 const sectionConnector: Record<ThemeType, React.ReactNode> = {
   purple: (
-    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none">
+    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none transform-gpu">
       <svg width="100%" height="100%" viewBox="0 0 1600 100" preserveAspectRatio="none" fill="none">
         <path d="M0,50 Q300,110 800,40 T1600,60 L1600,100 L0,100Z" fill="#FFD7B5" fillOpacity="0.33" />
       </svg>
     </div>
   ),
   peach: (
-    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none">
+    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none transform-gpu">
       <svg width="100%" height="100%" viewBox="0 0 1600 100" preserveAspectRatio="none" fill="none">
         <path d="M0,70 Q400,10 900,70 T1600,60 L1600,100 L0,100Z" fill="#CDE4B5" fillOpacity="0.28" />
       </svg>
     </div>
   ),
   mint: (
-    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none">
+    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-24 flex items-end z-10 pointer-events-none transform-gpu">
       <svg width="100%" height="100%" viewBox="0 0 1600 100" preserveAspectRatio="none" fill="none">
         <path d="M0,40 Q350,120 850,55 T1600,80 L1600,100 L0,100Z" fill="#FFA0CB" fillOpacity="0.17" />
       </svg>
@@ -90,36 +91,112 @@ const sectionConnector: Record<ThemeType, React.ReactNode> = {
   pink: null,
 };
 
-const ThemeSection: React.FC<ThemeSectionProps> = ({ id, theme, children, className = "" }) => {
+// Add 3D background particles for additional depth
+const ThemeParticles = ({ theme, count = 20 }: { theme: ThemeType; count?: number }) => {
+  const particleColors: Record<ThemeType, string[]> = {
+    purple: ['#9b87f5', '#5325a0', '#7E69AB'],
+    peach: ['#ff9a76', '#ffd7b5', '#ff7171'],
+    mint: ['#6fcf97', '#9af8e2', '#cde4b5'],
+    pink: ['#FFA0CB', '#FF719A', '#FFE2F2']
+  };
+
+  const colors = particleColors[theme];
+  
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {Array.from({ length: count }).map((_, i) => {
+        const size = Math.random() * 40 + 10; // 10-50px
+        const posX = Math.random() * 100; // 0-100%
+        const posY = Math.random() * 100; // 0-100%
+        const delay = Math.random() * 10; // 0-10s
+        const duration = Math.random() * 20 + 15; // 15-35s
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        return (
+          <div 
+            key={i}
+            className="absolute rounded-full opacity-20 transform-gpu blur-md"
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              backgroundColor: color,
+              left: `${posX}%`,
+              top: `${posY}%`,
+              animation: `float ${duration}s ease-in-out ${delay}s infinite alternate`
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+const ThemeSection: React.FC<ThemeSectionProps> = ({ 
+  id, 
+  theme, 
+  children, 
+  className = "",
+  animationOptions 
+}) => {
   const ref = useRef<HTMLDivElement | null>(null);
   // InView triggers animate-3d-in class when visible
-  const isInView = useInView3D(ref);
+  const { isInView, animValues } = useInView3D(ref, {
+    threshold: 0.25,
+    rotateX: theme === 'purple' ? 25 : theme === 'peach' ? 20 : theme === 'mint' ? 22 : 18,
+    translateY: theme === 'purple' ? 40 : theme === 'peach' ? 35 : theme === 'mint' ? 38 : 30,
+    scale: 0.92,
+    blur: 8,
+    ...animationOptions
+  });
 
   const { bg, overlay, border } = themeConfig[theme];
+
+  // Custom transition duration based on theme
+  const transitionDuration = 
+    theme === 'purple' ? 'duration-1000' : 
+    theme === 'peach' ? 'duration-900' : 
+    theme === 'mint' ? 'duration-800' : 
+    'duration-700';
 
   return (
     <section
       id={id}
       ref={ref}
       className={cn(
-        `theme-section-3d relative min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 lg:px-0 scroll-mt-28
-        ${bg} transition-all duration-700 ease-in-out ${className}`,
-        isInView ? "animate-3d-in" : "opacity-0 translate-y-20 scale-[0.97] rotate-x-12 pointer-events-none"
+        `theme-section-3d relative min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 lg:px-0 scroll-mt-16
+        ${bg} transition-all ${transitionDuration} ease-out will-change-transform will-change-opacity ${className}`,
+        isInView ? "animate-3d-in" : "opacity-0 pointer-events-none"
       )}
-      style={{ scrollSnapAlign: "start" }}
+      style={{
+        scrollSnapAlign: "start",
+        transform: !isInView ? 
+          `perspective(1600px) rotateX(${animValues.rotateX}deg) translateY(${animValues.translateY}px) scale(${animValues.scale})` : 
+          "none",
+        filter: !isInView ? `blur(${animValues.blur}px)` : "none"
+      }}
     >
-      {/* 3D Animated Background */}
+      {/* 3D Animated Background with Particles */}
+      <ThemeParticles theme={theme} />
       {overlay && overlay}
-      {/* Interior */}
+      
+      {/* Interior Content with glass effect */}
       <div className={cn(
-        `w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center bg-white/80 backdrop-blur-lg relative z-20 border`,
-        border,
-        `duration-700 transition-all`
-      )}>
+        `w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center bg-white/80 backdrop-blur-lg relative z-20 border transform-gpu transition-all
+        ${border} ${transitionDuration}`,
+        isInView ? "scale-100 translate-y-0 opacity-100" : "scale-95 translate-y-8 opacity-0"
+      )}
+      style={{ transitionDelay: "100ms" }}>
         {children}
       </div>
-      {/* Curve */}
-      {sectionConnector[theme]}
+      
+      {/* Theme Connector */}
+      <div className={cn(
+        "transition-all duration-1000",
+        isInView ? "opacity-100" : "opacity-0"
+      )} 
+      style={{ transitionDelay: "300ms" }}>
+        {sectionConnector[theme]}
+      </div>
     </section>
   );
 };
