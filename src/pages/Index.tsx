@@ -1,4 +1,3 @@
-
 // Main Duo multi-theme landing/scroll experience with enhanced 3D animations
 
 import React, { useEffect, useState } from "react";
@@ -20,7 +19,7 @@ export default function Index() {
       }
       
       // Detect which section is in view
-      const sections = ["welcome", "register", "book", "wallet", "admin"];
+      const sections = ["welcome", "register", "book", "mitre", "wallet", "admin"];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -47,9 +46,9 @@ export default function Index() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-[#F1F0FB] text-[#222] scroll-smooth relative overflow-hidden" style={{ scrollSnapType: "y mandatory" }}>
+    <main className="w-full min-h-screen bg-[#FDF6F3] text-[#222] scroll-smooth relative overflow-hidden" style={{ scrollSnapType: "y mandatory" }}>
       {/* Fixed background gradient */}
-      <div className="fixed inset-0 bg-gradient-to-b from-[#F1F0FB] to-[#E5DEFF] -z-10 pointer-events-none"></div>
+      <div className="fixed inset-0 bg-gradient-to-b from-[#FDF6F3] to-[#E5DEFF] -z-10 pointer-events-none"></div>
       
       {/* Floating 3D particles in background */}
       <div className="fixed inset-0 -z-5 pointer-events-none overflow-hidden">
@@ -80,11 +79,12 @@ export default function Index() {
       </div>
 
       {/* NAV (fixed, scrolls to sections) */}
-      <nav className="fixed top-0 left-1/2 -translate-x-1/2 z-30 flex gap-4 bg-white/80 backdrop-blur border border-white/40 rounded-full px-8 py-3 mt-4 shadow-lg glass-morphism transform-gpu transition-all duration-500 hover:shadow-xl">
+      <nav className="fixed top-0 left-1/2 -translate-x-1/2 z-30 flex gap-4 bg-white/90 backdrop-blur border border-white/40 rounded-full px-8 py-3 mt-4 shadow-lg glass-morphism transform-gpu transition-all duration-500 hover:shadow-xl">
         {[
           { label: "Welcome", href: "#welcome" },
           { label: "Register", href: "#register" },
           { label: "Book", href: "#book" },
+          { label: "Mitre", href: "#mitre" },
           { label: "Wallet", href: "#wallet" },
           { label: "Admin", href: "#admin" },
         ].map((item) => {
@@ -94,18 +94,17 @@ export default function Index() {
               key={item.href}
               onClick={() => scrollToSection(item.href.substring(1))}
               className={`
-                relative font-semibold px-3 py-1 transition-all duration-300 
+                relative font-semibold font-premium px-3 py-1 transition-all duration-300 
                 ${isActive 
                   ? "text-white" 
-                  : "text-[#6E59A5] hover:text-[#8B5CF6]"}
+                  : "text-[#7C4D03] hover:text-[#FFD600]"}
               `}
             >
-              {/* Background pill that slides into place */}
               <span 
                 className={`
                   absolute inset-0 rounded-full transition-all duration-300 transform-gpu -z-10
                   ${isActive 
-                    ? "bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] opacity-100 scale-100" 
+                    ? "bg-gradient-to-r from-[#FFD600] to-[#FFAB00] opacity-100 scale-100" 
                     : "opacity-0 scale-50"}
                 `}
               ></span>
@@ -115,26 +114,22 @@ export default function Index() {
         })}
       </nav>
 
-      {/* Section 1: Welcome & Brand */}
+      {/* Section 1: Welcome */}
       <ThemeSection id="welcome" theme="purple" animationOptions={{ once: true, delay: 100 }}>
         <Hero3D />
-        <h1 className="text-5xl font-black bg-gradient-to-br from-[#8B5CF6] to-[#7E69AB] bg-clip-text text-transparent mb-4 animate-[fadeScaleIn_1s_ease-out]">
+        <h1 className="text-5xl font-black bg-gradient-to-br from-[#8B5CF6] to-[#7E69AB] bg-clip-text text-transparent mb-4 font-premium animate-[fadeScaleIn_1s_ease-out]">
           DUO: India's Ride-Sharing Revolution
         </h1>
-        <p className="text-xl text-gray-700 mb-6 max-w-2xl animate-[fadeSlideUp_1s_ease-out_0.3s_both]">
+        <p className="text-xl text-gray-600 mb-6 max-w-2xl font-playfair animate-[fadeSlideUp_1s_ease-out_0.3s_both]">
           Affordable, sustainable, and social rides for everyone. 
-          <span className="bg-[#FEF7CD]/40 rounded px-2 ml-1">Bike, scooter, or car—get there together.</span>
+          <span className="bg-[#FEF7CD]/60 rounded px-2 ml-1">Bike, scooter, or car—get there together.</span>
         </p>
         <a
           href="#register"
-          onClick={(e) => { 
-            e.preventDefault(); 
-            scrollToSection("register"); 
-          }}
-          className="flex gap-2 items-center px-6 py-3 rounded-xl font-semibold bg-[#9b87f5] text-white shadow-lg hover:scale-105 transition hover:bg-[#7E69AB] animate-[fadeSlideUp_1s_ease-out_0.5s_both] relative overflow-hidden group"
+          onClick={(e) => { e.preventDefault(); scrollToSection("register"); }}
+          className="flex gap-2 items-center px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-[#8B5CF6] to-[#7E69AB] text-white shadow-lg hover:scale-105 transition hover:from-[#7E69AB] hover:to-[#8B5CF6] animate-[fadeSlideUp_1s_ease-out_0.5s_both] relative overflow-hidden group font-premium"
         >
-          {/* Shiny overlay effect */}
-          <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:animate-[shine_1.5s_ease-in-out]"></span>
+          <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-200%] group-hover:animate-[shine_1.5s_ease-in-out]"></span>
           Get Started
           <ArrowDown size={20} className="group-hover:animate-bounce" />
         </a>
@@ -143,9 +138,9 @@ export default function Index() {
       {/* Section 2: Register/KYC */}
       <ThemeSection id="register" theme="peach" animationOptions={{ rotateX: 18, translateY: 35 }}>
         <Vehicle3D type="users" />
-        <h2 className="text-3xl font-bold mb-2 text-[#f97316] animate-[rotateIn_0.8s_ease-out_both]">Register & Verify in Minutes</h2>
-        <p className="text-lg text-gray-700 mb-4 animate-[fadeSlideUp_0.8s_ease-out_0.2s_both]">
-          Sign up instantly with your phone number. <br />
+        <h2 className="text-3xl font-bold mb-2 text-[#fa8f2e] font-premium animate-[rotateIn_0.8s_ease-out_both]">Register & Verify in Minutes</h2>
+        <p className="text-lg text-gray-700 mb-4 font-playfair animate-[fadeSlideUp_0.8s_ease-out_0.2s_both]">
+          Sign up instantly with your phone number.<br />
           Complete KYC (license, RC) and join India's safest ride network.
         </p>
         <form
@@ -162,7 +157,6 @@ export default function Index() {
             type="submit"
             className="w-full py-2 rounded-lg bg-[#FFA99F] text-white font-semibold text-lg hover:bg-[#F97316] transition-all duration-300 hover:shadow-lg hover:scale-105 group relative overflow-hidden"
           >
-            {/* Pulse effect on hover */}
             <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:animate-[pulse_2s_infinite] rounded-lg"></span>
             Get OTP
           </button>
@@ -175,10 +169,10 @@ export default function Index() {
           <Vehicle3D type="bike" />
           <Vehicle3D type="car" />
         </div>
-        <h2 className="text-3xl font-bold mb-2 text-[#94C41A] animate-[rotateIn_0.8s_ease-out_0.2s_both]">Book a Ride, Pool & Save</h2>
-        <p className="text-lg text-gray-700 max-w-md mb-4 animate-[fadeSlideUp_0.8s_ease-out_0.4s_both]">
-          Instant or advance. One-way or pool. Duo's smart match means up to 15% detour—never far, always fair.<br />
-          Pay <span className="bg-[#FDE1D3] rounded px-2">₹20–₹25/km</span> &mdash; way cheaper than autos.
+        <h2 className="text-3xl font-bold mb-2 text-[#6fcf97] font-premium animate-[rotateIn_0.8s_ease-out_0.2s_both]">Book a Ride, Pool & Save</h2>
+        <p className="text-lg text-gray-700 max-w-md mb-4 font-playfair animate-[fadeSlideUp_0.8s_ease-out_0.4s_both]">
+          Instant or advance. One-way or pool. Duo's smart match with up to 15% detour.<br />
+          Pay <span className="bg-[#FDE1D3] rounded px-2">₹20–₹25/km</span> — way cheaper than autos.
         </p>
         <div className="flex gap-2 animate-[fadeSlideUp_0.8s_ease-out_0.6s_both]">
           <a 
@@ -195,11 +189,36 @@ export default function Index() {
         </div>
       </ThemeSection>
 
-      {/* Section 4: Wallet & Payment */}
+      {/* Section 4: Mitre Rides By Auto */}
+      <ThemeSection id="mitre" theme="auto" animationOptions={{ rotateX: 21, translateY: 34 }}>
+        <Vehicle3D type="taxi" />
+        <h2 className="text-3xl font-extrabold mb-3 text-[#FFD600] font-premium animate-[rotateIn_0.85s_ease-out_both] drop-shadow-lg">Mitre Rides by Auto</h2>
+        <p className="text-lg text-[#7C4D03] font-playfair mb-4 animate-[fadeSlideUp_0.85s_ease-out_0.18s_both]">
+          Experience budget-friendly and comfortable auto rides around your city.<br />
+          Why pay more? Our <span className="bg-[#FFF9C4]/80 rounded px-2">Mitre Rides by Auto</span> offer fixed fares,
+          <strong className="ml-1 text-[#FFAB00]">friendly drivers</strong>, and transparent trips!
+        </p>
+        <div className="w-full max-w-xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-6 animate-[fadeScaleIn_0.9s_ease-out_both]">
+          <div className="text-center bg-[#FFF8E1]/60 rounded-2xl py-6 px-4 border border-[#FFD600]/40 shadow">
+            <span className="block text-xl font-black mb-1 text-[#FFD600] font-premium">₹15/km</span>
+            <span className="text-sm text-[#B36A09] font-semibold">Best City Rate</span>
+          </div>
+          <div className="text-center bg-[#FFE082]/60 rounded-2xl py-6 px-4 border border-[#FFD600]/50 shadow">
+            <span className="block text-xl font-black mb-1 text-[#7C4D03] font-premium">4.9★</span>
+            <span className="text-sm text-[#B36A09] font-semibold">Trusted Drivers</span>
+          </div>
+          <div className="text-center bg-[#FFD54F]/60 rounded-2xl py-6 px-4 border border-[#FFD600]/30 shadow col-span-2 md:col-span-1">
+            <span className="block text-xl font-black mb-1 text-[#FFAB00] font-premium">Call/Book Instantly</span>
+            <span className="text-sm text-[#B36A09] font-semibold">No Surge Pricing</span>
+          </div>
+        </div>
+      </ThemeSection>
+
+      {/* Section 5: Wallet & Payment */}
       <ThemeSection id="wallet" theme="pink" animationOptions={{ rotateX: 18, translateY: 30 }}>
         <Vehicle3D type="car" />
-        <h2 className="text-3xl font-bold mb-2 text-[#FF719A] animate-[rotateIn_0.8s_ease-out_both]">Secure Wallet & Instant Pay</h2>
-        <p className="text-lg text-gray-700 mb-4 animate-[fadeSlideUp_0.8s_ease-out_0.2s_both]">
+        <h2 className="text-3xl font-bold mb-2 text-[#FF719A] font-premium animate-[rotateIn_0.8s_ease-out_both]">Secure Wallet & Instant Pay</h2>
+        <p className="text-lg text-gray-700 mb-4 font-playfair animate-[fadeSlideUp_0.8s_ease-out_0.2s_both]">
           Pay with UPI or in-app Duo Wallet via Razorpay/Paytm.<br />
           Drivers track earnings, payouts, and 2% Duo commission in real time.
         </p>
@@ -221,12 +240,12 @@ export default function Index() {
         </div>
       </ThemeSection>
 
-      {/* Section 5: Admin/Analytics */}
+      {/* Section 6: Admin/Analytics */}
       <ThemeSection id="admin" theme="purple" animationOptions={{ rotateX: 25, translateY: 40 }}>
         <Users size={60} className="text-[#0EA5E9] mb-2 animate-[fadeScaleIn_0.8s_ease-out_both]" />
-        <h2 className="text-3xl font-bold mb-2 text-[#0EA5E9] animate-[rotateIn_0.8s_ease-out_0.2s_both]">Duo Admin & Analytics</h2>
-        <p className="text-lg text-gray-700 max-w-xl mb-6 animate-[fadeSlideUp_0.8s_ease-out_0.4s_both]">
-          Duo brings you full control: manage users, trips, KYC, stats, support, and payouts. <br />
+        <h2 className="text-3xl font-bold mb-2 text-[#0EA5E9] font-premium animate-[rotateIn_0.8s_ease-out_0.2s_both]">Duo Admin & Analytics</h2>
+        <p className="text-lg text-gray-700 max-w-xl mb-6 font-playfair animate-[fadeSlideUp_0.8s_ease-out_0.4s_both]">
+          Duo gives you full control: manage users, trips, KYC, stats, support, and payouts.<br />
           <span className="bg-[#D3E4FD]/80 px-2 rounded">Your rides. Your data. Your safety—always.</span>
         </p>
         <div className="w-full flex flex-col md:flex-row gap-8 justify-center items-center">
@@ -261,8 +280,8 @@ export default function Index() {
         </div>
       </ThemeSection>
 
-      {/* Footer with 3D floating effect */}
-      <footer className="relative w-full py-10 pb-5 flex flex-col items-center text-sm text-gray-500 bg-white/10 backdrop-blur-sm border-t border-white/20">
+      {/* Footer */}
+      <footer className="relative w-full py-10 pb-5 flex flex-col items-center text-sm text-gray-500 bg-white/10 backdrop-blur-sm border-t border-white/20 font-playfair">
         <div className="animate-[float_5s_ease-in-out_infinite_alternate] transform-gpu">
           <span className="bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] bg-clip-text text-transparent font-bold">
             &copy; {new Date().getFullYear()} Duo · Built by the community for India

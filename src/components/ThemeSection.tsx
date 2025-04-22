@@ -1,9 +1,8 @@
-
 import React, { useRef } from "react";
 import { cn } from "@/lib/utils";
 import useInView3D, { InView3DOptions } from "@/components/useInView3D";
 
-type ThemeType = "purple" | "peach" | "mint" | "pink";
+type ThemeType = "purple" | "peach" | "mint" | "pink" | "auto";
 
 interface ThemeSectionProps {
   id?: string;
@@ -63,6 +62,16 @@ const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; bo
       </svg>
     ),
     border: "border-[#EE78A7]/50"
+  },
+  auto: {
+    bg: "bg-gradient-to-br from-[#FDF6B2] via-[#FFD600]/90 to-[#FFAB00]/60",
+    overlay: (
+      <svg className="absolute right-0 top-0 w-4/12 h-3/4 opacity-70 pointer-events-none" viewBox="0 0 420 220">
+        <rect x="20" y="40" width="380" height="80" rx="40" fill="#FFD600" fillOpacity="0.12" />
+        <ellipse cx="330" cy="90" rx="60" ry="28" fill="#FFAB00" fillOpacity="0.18" />
+      </svg>
+    ),
+    border: "border-[#FFD600]/70"
   }
 };
 
@@ -89,15 +98,22 @@ const sectionConnector: Record<ThemeType, React.ReactNode> = {
     </div>
   ),
   pink: null,
+  auto: (
+    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[96vw] h-20 flex items-end z-10 pointer-events-none transform-gpu">
+      <svg width="100%" height="100%" viewBox="0 0 1600 80" preserveAspectRatio="none" fill="none">
+        <path d="M0,40 Q400,90 900,30 T1600,70 L1600,80 L0,80Z" fill="#FDE1D3" fillOpacity="0.18" />
+      </svg>
+    </div>
+  )
 };
 
-// Add 3D background particles for additional depth
 const ThemeParticles = ({ theme, count = 20 }: { theme: ThemeType; count?: number }) => {
   const particleColors: Record<ThemeType, string[]> = {
     purple: ['#9b87f5', '#5325a0', '#7E69AB'],
     peach: ['#ff9a76', '#ffd7b5', '#ff7171'],
     mint: ['#6fcf97', '#9af8e2', '#cde4b5'],
-    pink: ['#FFA0CB', '#FF719A', '#FFE2F2']
+    pink: ['#FFA0CB', '#FF719A', '#FFE2F2'],
+    auto: ['#FFD600', '#FFAB00', '#FDF6B2']
   };
 
   const colors = particleColors[theme];
@@ -105,11 +121,11 @@ const ThemeParticles = ({ theme, count = 20 }: { theme: ThemeType; count?: numbe
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {Array.from({ length: count }).map((_, i) => {
-        const size = Math.random() * 40 + 10; // 10-50px
-        const posX = Math.random() * 100; // 0-100%
-        const posY = Math.random() * 100; // 0-100%
-        const delay = Math.random() * 10; // 0-10s
-        const duration = Math.random() * 20 + 15; // 15-35s
+        const size = Math.random() * 40 + 10;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 10;
+        const duration = Math.random() * 20 + 15;
         const color = colors[Math.floor(Math.random() * colors.length)];
         
         return (
@@ -131,32 +147,40 @@ const ThemeParticles = ({ theme, count = 20 }: { theme: ThemeType; count?: numbe
   );
 };
 
-const ThemeSection: React.FC<ThemeSectionProps> = ({ 
-  id, 
-  theme, 
-  children, 
+const ThemeSection: React.FC<ThemeSectionProps> = ({
+  id,
+  theme,
+  children,
   className = "",
-  animationOptions 
+  animationOptions
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  // InView triggers animate-3d-in class when visible
   const { isInView, animValues } = useInView3D(ref, {
     threshold: 0.25,
-    rotateX: theme === 'purple' ? 25 : theme === 'peach' ? 20 : theme === 'mint' ? 22 : 18,
-    translateY: theme === 'purple' ? 40 : theme === 'peach' ? 35 : theme === 'mint' ? 38 : 30,
+    rotateX:
+      theme === "purple" ? 25 :
+      theme === "peach" ? 20 :
+      theme === "mint" ? 22 :
+      theme === "auto" ? 21 :
+      18,
+    translateY:
+      theme === "purple" ? 40 :
+      theme === "peach" ? 35 :
+      theme === "mint" ? 38 :
+      theme === "auto" ? 34 :
+      30,
     scale: 0.92,
     blur: 8,
     ...animationOptions
   });
 
   const { bg, overlay, border } = themeConfig[theme];
-
-  // Custom transition duration based on theme
-  const transitionDuration = 
-    theme === 'purple' ? 'duration-1000' : 
-    theme === 'peach' ? 'duration-900' : 
-    theme === 'mint' ? 'duration-800' : 
-    'duration-700';
+  const transitionDuration =
+    theme === "purple" ? "duration-1000" :
+    theme === "peach" ? "duration-900" :
+    theme === "mint" ? "duration-800" :
+    theme === "auto" ? "duration-700" :
+    "duration-700";
 
   return (
     <section
@@ -169,31 +193,26 @@ const ThemeSection: React.FC<ThemeSectionProps> = ({
       )}
       style={{
         scrollSnapAlign: "start",
-        transform: !isInView ? 
-          `perspective(1600px) rotateX(${animValues.rotateX}deg) translateY(${animValues.translateY}px) scale(${animValues.scale})` : 
+        transform: !isInView ?
+          `perspective(1600px) rotateX(${animValues.rotateX}deg) translateY(${animValues.translateY}px) scale(${animValues.scale})` :
           "none",
         filter: !isInView ? `blur(${animValues.blur}px)` : "none"
       }}
     >
-      {/* 3D Animated Background with Particles */}
       <ThemeParticles theme={theme} />
       {overlay && overlay}
-      
-      {/* Interior Content with glass effect */}
       <div className={cn(
         `w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center bg-white/80 backdrop-blur-lg relative z-20 border transform-gpu transition-all
         ${border} ${transitionDuration}`,
         isInView ? "scale-100 translate-y-0 opacity-100" : "scale-95 translate-y-8 opacity-0"
       )}
-      style={{ transitionDelay: "100ms" }}>
+      style={{ transitionDelay: "100ms", fontFamily: "Playfair Display, serif" }}>
         {children}
       </div>
-      
-      {/* Theme Connector */}
       <div className={cn(
         "transition-all duration-1000",
         isInView ? "opacity-100" : "opacity-0"
-      )} 
+      )}
       style={{ transitionDelay: "300ms" }}>
         {sectionConnector[theme]}
       </div>

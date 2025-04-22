@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				playfair: ['"Playfair Display"', 'serif'],
+				premium: ['"Playfair Display"', 'ui-serif', 'Georgia'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,6 +66,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				auto: {
+					DEFAULT: '#FDF6B2',
+					foreground: '#7C4D03',
+					primary: '#FFD600',
+					accent: '#FFAB00',
+					border: '#FFECB3',
 				}
 			},
 			borderRadius: {
@@ -94,3 +106,4 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
