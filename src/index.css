@@ -191,7 +191,7 @@ body::-webkit-scrollbar {
 
 /* Add for glassmorphism effect improvement */
 .glass-morphism {
-  @apply backdrop-blur-xl bg-white/70 border border-white/20 shadow-[0_8px_40px_-8px_rgba(120,68,215,0.08)];
+  @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/60 border border-white/20 dark:border-slate-700/20 shadow-[0_8px_40px_-8px_rgba(120,68,215,0.08)] dark:shadow-[0_8px_40px_-8px_rgba(30,20,70,0.15)];
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');

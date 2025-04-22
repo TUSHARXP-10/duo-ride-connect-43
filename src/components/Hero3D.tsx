@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useRef, useState } from "react";
 import { CarFront, Bike, Users, MapPin } from "lucide-react";
 
@@ -80,18 +81,20 @@ const RotatingCube = () => {
   );
 };
 
-const Vehicle3DFloat = ({ type, delay = 0 }: { type: "car" | "bike" | "users"; delay?: number }) => {
+const Vehicle3DFloat = ({ type, delay = 0 }: { type: "car" | "bike" | "users" | "taxi"; delay?: number }) => {
   const iconRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState(false);
   
   const iconColor = 
     type === "car" ? "text-[#8B5CF6]" :
     type === "bike" ? "text-[#F97316]" :
+    type === "taxi" ? "text-[#FFD600]" :
     "text-[#0EA5E9]";
   
   const shadowColor = 
     type === "car" ? "drop-shadow-[0_10px_15px_rgba(139,92,246,0.3)]" :
     type === "bike" ? "drop-shadow-[0_10px_15px_rgba(249,115,22,0.3)]" :
+    type === "taxi" ? "drop-shadow-[0_10px_15px_rgba(255,214,0,0.3)]" :
     "drop-shadow-[0_10px_15px_rgba(14,165,233,0.3)]";
     
   return (
@@ -112,6 +115,7 @@ const Vehicle3DFloat = ({ type, delay = 0 }: { type: "car" | "bike" | "users"; d
         {type === "car" && <CarFront size={60} className={`${iconColor} ${shadowColor}`} />}
         {type === "bike" && <Bike size={60} className={`${iconColor} ${shadowColor}`} />}
         {type === "users" && <Users size={60} className={`${iconColor} ${shadowColor}`} />}
+        {type === "taxi" && <CarFront size={60} className={`${iconColor} ${shadowColor}`} />}
         
         {/* Glow effect on hover */}
         <div className={`
@@ -131,7 +135,7 @@ const Vehicle3DFloat = ({ type, delay = 0 }: { type: "car" | "bike" | "users"; d
   );
 };
 
-export const Vehicle3D = ({ type }: { type: "car" | "bike" | "users" }) => (
+export const Vehicle3D = ({ type }: { type: "car" | "bike" | "users" | "taxi" }) => (
   <Vehicle3DFloat type={type} delay={Math.random()} />
 );
 

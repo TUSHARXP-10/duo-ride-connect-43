@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import { cn } from "@/lib/utils";
 import useInView3D, { InView3DOptions } from "@/components/useInView3D";
@@ -12,9 +13,17 @@ interface ThemeSectionProps {
   animationOptions?: InView3DOptions;
 }
 
-const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; border?: string }> = {
+interface ThemeConfig {
+  bg: string;
+  darkBg?: string;
+  overlay?: React.ReactNode;
+  border?: string;
+}
+
+const themeConfig: Record<ThemeType, ThemeConfig> = {
   purple: {
     bg: "bg-gradient-to-br from-[#220057] via-[#6e59a5]/70 to-[#9b87f5]/80",
+    darkBg: "dark:bg-gradient-to-br dark:from-[#15062d] dark:via-[#2e263d]/90 dark:to-[#3b2e5e]/90",
     overlay: (
       <svg className="absolute left-0 top-0 w-full h-full -z-1 pointer-events-none" viewBox="0 0 1440 320">
         <defs>
@@ -26,20 +35,22 @@ const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; bo
         <path fill="url(#purpleWaves)" d="M0,128L36.6,117.3C73.2,107,146,85,218,85.3C290,85,363,107,436,133.3C508,160,581,192,653,181.3C726,171,798,117,871,112C943,107,1016,149,1089,149.3C1161,149,1234,107,1307,128C1379,149,1452,235,1515,256L1518,320L0,320Z"/>
       </svg>
     ),
-    border: "border-[#5325a0]/60"
+    border: "border-[#5325a0]/60 dark:border-purple-900/40"
   },
   peach: {
     bg: "bg-gradient-to-tr from-[#ffd7b5] via-[#ffa06b]/80 to-[#ff7171]/80",
+    darkBg: "dark:bg-gradient-to-tr dark:from-[#472d20] dark:via-[#583f35]/90 dark:to-[#5e3939]/90",
     overlay: (
       <svg className="absolute right-0 top-0 w-5/12 h-3/4 opacity-80 pointer-events-none" viewBox="0 0 400 350">
         <ellipse cx="200" cy="170" rx="180" ry="100" fill="#FF719A" fillOpacity="0.12" />
         <ellipse cx="260" cy="110" rx="110" ry="60" fill="#FFA06B" fillOpacity="0.17" />
       </svg>
     ),
-    border: "border-[#FF9E69]/60"
+    border: "border-[#FF9E69]/60 dark:border-orange-900/40"
   },
   mint: {
     bg: "bg-gradient-to-bl from-[#cde4b5] via-[#9af8e2]/80 to-[#6fcf97]/90",
+    darkBg: "dark:bg-gradient-to-bl dark:from-[#2a3825] dark:via-[#1b4035]/90 dark:to-[#1b4028]/90",
     overlay: (
       <svg className="absolute left-0 bottom-0 w-full h-44 pointer-events-none" viewBox="0 0 1440 160">
         <defs>
@@ -51,27 +62,29 @@ const themeConfig: Record<ThemeType, { bg: string; overlay?: React.ReactNode; bo
         <path fill="url(#mintWave)" d="M0,128L48,112C96,96,192,64,288,58.7C384,53,480,75,576,101.3C672,128,768,160,864,170.7C960,181,1056,171,1152,138.7C1248,107,1344,53,1392,26.7L1440,0V160H0Z" />
       </svg>
     ),
-    border: "border-[#50cfa0]/50"
+    border: "border-[#50cfa0]/50 dark:border-green-900/40"
   },
   pink: {
     bg: "bg-gradient-to-tl from-[#FFE2F2] via-[#FFA0CB]/90 to-[#FF719A]/80",
+    darkBg: "dark:bg-gradient-to-tl dark:from-[#402b38] dark:via-[#4d2d40]/90 dark:to-[#592637]/90",
     overlay: (
       <svg className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-40 pointer-events-none" viewBox="0 0 700 160">
         <circle cx="350" cy="80" r="80" fill="#FF719A" fillOpacity="0.17" />
         <ellipse cx="500" cy="40" rx="110" ry="35" fill="#EC4899" fillOpacity="0.10" />
       </svg>
     ),
-    border: "border-[#EE78A7]/50"
+    border: "border-[#EE78A7]/50 dark:border-pink-900/40"
   },
   auto: {
     bg: "bg-gradient-to-br from-[#FDF6B2] via-[#FFD600]/90 to-[#FFAB00]/60",
+    darkBg: "dark:bg-gradient-to-br dark:from-[#3d3926] dark:via-[#5e4f00]/90 dark:to-[#593d00]/90",
     overlay: (
       <svg className="absolute right-0 top-0 w-4/12 h-3/4 opacity-70 pointer-events-none" viewBox="0 0 420 220">
         <rect x="20" y="40" width="380" height="80" rx="40" fill="#FFD600" fillOpacity="0.12" />
         <ellipse cx="330" cy="90" rx="60" ry="28" fill="#FFAB00" fillOpacity="0.18" />
       </svg>
     ),
-    border: "border-[#FFD600]/70"
+    border: "border-[#FFD600]/70 dark:border-yellow-900/40"
   }
 };
 
@@ -188,7 +201,7 @@ const ThemeSection: React.FC<ThemeSectionProps> = ({
       ref={ref}
       className={cn(
         `theme-section-3d relative min-h-screen w-full flex flex-col justify-center items-center py-20 px-4 lg:px-0 scroll-mt-16
-        ${bg} transition-all ${transitionDuration} ease-out will-change-transform will-change-opacity ${className}`,
+        ${bg} ${themeConfig[theme].darkBg || ''} transition-all ${transitionDuration} ease-out will-change-transform will-change-opacity ${className}`,
         isInView ? "animate-3d-in" : "opacity-0 pointer-events-none"
       )}
       style={{
@@ -202,7 +215,7 @@ const ThemeSection: React.FC<ThemeSectionProps> = ({
       <ThemeParticles theme={theme} />
       {overlay && overlay}
       <div className={cn(
-        `w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center bg-white/80 backdrop-blur-lg relative z-20 border transform-gpu transition-all
+        `w-full max-w-4xl glass-morphism p-10 rounded-3xl shadow-2xl flex flex-col items-center bg-white/80 dark:bg-slate-800/70 backdrop-blur-lg relative z-20 border transform-gpu transition-all
         ${border} ${transitionDuration}`,
         isInView ? "scale-100 translate-y-0 opacity-100" : "scale-95 translate-y-8 opacity-0"
       )}
@@ -219,5 +232,23 @@ const ThemeSection: React.FC<ThemeSectionProps> = ({
     </section>
   );
 };
+
+// Add keyframe for shine effect in theme toggle button
+if (typeof document !== "undefined") {
+  if (!document.querySelector("@keyframes shine")) {
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes shine {
+        from {
+          transform: translateX(-200%);
+        }
+        to {
+          transform: translateX(200%);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
 
 export default ThemeSection;
