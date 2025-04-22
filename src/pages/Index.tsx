@@ -1,19 +1,9 @@
-
 // Main Duo multi-theme landing/scroll experience
 
 import React from "react";
 import ThemeSection from "@/components/ThemeSection";
 import { Hero3D, Vehicle3D } from "@/components/Hero3D";
-import { Bike, CarFront, Users, MapPin, ArrowDown, ArrowRight } from "lucide-react";
-
-// Gradients from provided palette
-const gradients = [
-  "bg-gradient-to-b from-[#E5DEFF] via-[#9b87f5]/40 to-[#F1F0FB]",
-  "bg-gradient-to-tr from-[#FDE1D3] via-[#FFDEE2] to-[#E5DEFF]",
-  "bg-gradient-to-br from-[#D3E4FD] via-[#F2FCE2] to-[#FEF7CD]",
-  "bg-gradient-to-tl from-[#FFE29F] via-[#FFA99F] to-[#FF719A]",
-  "bg-gradient-to-tr from-[#D3E4FD] via-[#0EA5E9]/20 to-[#6E59A5]",
-];
+import { Users, MapPin, ArrowDown, ArrowRight } from "lucide-react";
 
 export default function Index() {
   return (
@@ -38,7 +28,7 @@ export default function Index() {
       </nav>
 
       {/* Section 1: Welcome & Brand */}
-      <ThemeSection id="welcome" gradient={gradients[0]}>
+      <ThemeSection id="welcome" theme="purple">
         <Hero3D />
         <h1 className="text-5xl font-black bg-gradient-to-br from-[#8B5CF6] to-[#7E69AB] bg-clip-text text-transparent mb-4 animate-fade-in">
           DUO: India’s Ride-Sharing Revolution
@@ -54,9 +44,9 @@ export default function Index() {
       </ThemeSection>
 
       {/* Section 2: Register/KYC */}
-      <ThemeSection id="register" gradient={gradients[1]}>
+      <ThemeSection id="register" theme="peach">
         <Vehicle3D type="users" />
-        <h2 className="text-3xl font-bold mb-2 text-[#7E69AB]">Register & Verify in Minutes</h2>
+        <h2 className="text-3xl font-bold mb-2 text-[#f97316]">Register & Verify in Minutes</h2>
         <p className="text-lg text-gray-700 mb-4">Sign up instantly with your phone number. <br />Complete KYC (license, RC) and join India’s safest ride network.</p>
         <form
           onSubmit={e => { e.preventDefault(); alert("Demo only, OTP flow coming soon!"); }}
@@ -66,11 +56,11 @@ export default function Index() {
             type="tel"
             required
             placeholder="Enter your mobile number"
-            className="py-2 px-4 rounded-lg border-2 border-[#E5DEFF] bg-white/40 focus:ring-[#9b87f5] focus:border-[#9b87f5] text-lg outline-none w-full"
+            className="py-2 px-4 rounded-lg border-2 border-[#FFD1BA] bg-white/40 focus:ring-[#F97316] focus:border-[#FFA99F] text-lg outline-none w-full"
           />
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-[#8B5CF6] text-white font-semibold text-lg hover:bg-[#7E69AB] transition"
+            className="w-full py-2 rounded-lg bg-[#FFA99F] text-white font-semibold text-lg hover:bg-[#F97316] transition"
           >
             Get OTP
           </button>
@@ -78,15 +68,15 @@ export default function Index() {
       </ThemeSection>
 
       {/* Section 3: Book & Pool */}
-      <ThemeSection id="book" gradient={gradients[2]}>
+      <ThemeSection id="book" theme="mint">
         <div className="flex flex-col items-center">
           <Vehicle3D type="bike" />
           <Vehicle3D type="car" />
         </div>
-        <h2 className="text-3xl font-bold mb-2 text-[#F97316]">Book a Ride, Pool & Save</h2>
+        <h2 className="text-3xl font-bold mb-2 text-[#94C41A]">Book a Ride, Pool & Save</h2>
         <p className="text-lg text-gray-700 max-w-md mb-4">Instant or advance. One-way or pool. Duo’s smart match means up to 15% detour—never far, always fair.<br />Pay <span className="bg-[#FDE1D3] rounded px-2">₹20–₹25/km</span> &mdash; way cheaper than autos.</p>
         <div className="flex gap-2">
-          <a href="#wallet" className="px-5 py-2 rounded-lg bg-[#F97316] text-white font-semibold hover:bg-[#FF719A] transition flex items-center gap-2">
+          <a href="#wallet" className="px-5 py-2 rounded-lg bg-[#94C41A] text-white font-semibold hover:bg-[#0EA5E9] transition flex items-center gap-2">
             Next
             <ArrowRight size={17} />
           </a>
@@ -94,7 +84,7 @@ export default function Index() {
       </ThemeSection>
 
       {/* Section 4: Wallet & Payment */}
-      <ThemeSection id="wallet" gradient={gradients[3]}>
+      <ThemeSection id="wallet" theme="pink">
         <Vehicle3D type="car" />
         <h2 className="text-3xl font-bold mb-2 text-[#FF719A]">Secure Wallet & Instant Pay</h2>
         <p className="text-lg text-gray-700 mb-4">Pay with UPI or in-app Duo Wallet via Razorpay/Paytm.<br />Drivers track earnings, payouts, and 2% Duo commission in real time.</p>
@@ -114,8 +104,8 @@ export default function Index() {
         </div>
       </ThemeSection>
 
-      {/* Section 5: Admin/Analytics */}
-      <ThemeSection id="admin" gradient={gradients[4]}>
+      {/* Section 5: Admin/Analytics (keep this section visually as a footer, but themed as mint/purple for separation) */}
+      <ThemeSection id="admin" theme="purple">
         <Users size={60} className="text-[#0EA5E9] animate-bounce mb-2" />
         <h2 className="text-3xl font-bold mb-2 text-[#0EA5E9]">Duo Admin & Analytics</h2>
         <p className="text-lg text-gray-700 max-w-xl mb-6">
@@ -140,7 +130,7 @@ export default function Index() {
         </div>
       </ThemeSection>
 
-      {/* Footer */}
+      {/* Footer (neutral style) */}
       <footer className="relative w-full py-10 pb-5 flex flex-col items-center text-sm text-gray-400 bg-white/0">
         <span>
           &copy; {new Date().getFullYear()} Duo · Built by the community for India
